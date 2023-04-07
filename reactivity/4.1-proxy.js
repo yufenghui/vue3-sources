@@ -1,3 +1,4 @@
+// framework code
 
 function reactive(target) {
     const handler = {
@@ -13,6 +14,8 @@ function reactive(target) {
 
     return new Proxy(target, handler)
 }
+
+// test code
 
 let product = reactive({ price: 5, quantity: 2 })
 product.quantity = 3

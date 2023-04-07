@@ -33,8 +33,13 @@ function trigger(key) {
 }
 
 
-// call effect(), total = 10
-// track("quantity")
-// product.quantity = 3
-// trigger("quantity")
-// total = 15
+// test code
+
+effect()
+console.log(total)
+
+track("quantity")
+product.quantity = 3
+
+trigger("quantity")
+console.log(total)
