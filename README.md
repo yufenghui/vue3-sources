@@ -2,6 +2,7 @@
 
 ### Reactivity
 
-- targetMap
-- depsMap
 - dep
+- depsMap
+- targetMap
+- proxy

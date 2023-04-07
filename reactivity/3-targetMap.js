@@ -14,9 +14,9 @@ let effect = () => {
 const targetMap = new Map()
 
 function track(target, key) {
-    const depsMap = targetMap.get(target)
+    let depsMap = targetMap.get(target)
     if(!depsMap) {
-        targetMap.set(key, (depsMap = new Map()))
+        targetMap.set(target, (depsMap = new Map()))
     }
 
     let dep = depsMap.get(key)
