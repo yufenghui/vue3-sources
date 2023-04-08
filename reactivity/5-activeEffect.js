@@ -1,19 +1,28 @@
 // framework code
 
 const targetMap = new WeakMap();
+let activeEffect = null;
+
+function effect(eff) {
+    activeEffect = eff;
+    activeEffect();
+    activeEffect = null;
+}
 
 function track(target, key) {
-    let depsMap = targetMap.get(target);
-    if (!depsMap) {
-        targetMap.set(target, (depsMap = new Map()));
-    }
+    if (activeEffect) {
+        let depsMap = targetMap.get(target);
+        if (!depsMap) {
+            targetMap.set(target, (depsMap = new Map()));
+        }
 
-    let dep = depsMap.get(key);
-    if (!dep) {
-        depsMap.set(key, (dep = new Set()));
-    }
+        let dep = depsMap.get(key);
+        if (!dep) {
+            depsMap.set(key, (dep = new Set()));
+        }
 
-    dep.add(effect);
+        dep.add(activeEffect);
+    }
 }
 
 function trigger(target, key) {
@@ -53,14 +62,20 @@ function reactive(target) {
 // test code
 
 let product = reactive({ price: 5, quantity: 2 });
+let salePrice = 0;
 let total = 0;
 
-let effect = () => {
+effect(() => {
     total = product.price * product.quantity;
-};
+});
+effect(() => {
+    salePrice = product.price * 0.9;
+});
 
-effect();
-console.log(total);
+console.log(`total = ${total}, salePrice = ${salePrice}`);
 
 product.quantity = 3;
-console.log(total);
+console.log(`total = ${total}, salePrice = ${salePrice}`);
+
+product.price = 10;
+console.log(`total = ${total}, salePrice = ${salePrice}`);

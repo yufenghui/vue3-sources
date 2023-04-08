@@ -1,53 +1,52 @@
 let product = {
     price: 5,
-    quantity: 2
-}
-let total = 0
+    quantity: 2,
+};
+let total = 0;
 
 let effect = () => {
-    total = product.price * product.quantity
-}
-
+    total = product.price * product.quantity;
+};
 
 // framework code
 
-const targetMap = new Map()
+const targetMap = new WeakMap();
 
 function track(target, key) {
-    let depsMap = targetMap.get(target)
-    if(!depsMap) {
-        targetMap.set(target, (depsMap = new Map()))
+    let depsMap = targetMap.get(target);
+    if (!depsMap) {
+        targetMap.set(target, (depsMap = new Map()));
     }
 
-    let dep = depsMap.get(key)
-    if(!dep) {
-        depsMap.set(key, (dep = new Set()))
+    let dep = depsMap.get(key);
+    if (!dep) {
+        depsMap.set(key, (dep = new Set()));
     }
 
-    dep.add(effect)
+    dep.add(effect);
 }
 
 function trigger(target, key) {
-    const depsMap = targetMap.get(target)
-    if(!depsMap) {
-        return
+    const depsMap = targetMap.get(target);
+    if (!depsMap) {
+        return;
     }
 
-    let dep = depsMap.get(key)
-    if(dep) {
-        dep.forEach(effect => {
-            effect()
+    let dep = depsMap.get(key);
+    if (dep) {
+        dep.forEach((effect) => {
+            effect();
         });
     }
 }
 
 // test code
 
-effect()
-console.log(total)
+effect();
+console.log(total);
 
-track(product, "quantity")
-product.quantity = 3
+track(product, "quantity");
+product.quantity = 3;
 
-trigger(product, "quantity")
-console.log(total)
+trigger(product, "quantity");
+console.log(total);
